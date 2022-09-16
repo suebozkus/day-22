@@ -1,7 +1,16 @@
-import logo from './logo.svg';
-import './App.css';
+import logo from "./logo.svg";
+import "./App.css";
+import { useState, useEffect } from "react";
 
 function App() {
+  const [todos, settodos] = useState([]);
+  useEffect(() => {
+    fetch("https://jsonplaceholder.typicode.com/todos")
+      .then((response) => response.json())
+      .then((json) => {
+        settodos(json)
+      });
+  }, []);
   return (
     <div className="App">
       <header className="App-header">
@@ -17,6 +26,9 @@ function App() {
         >
           Learn React
         </a>
+        {todos.map(todo => (
+          <li>{todo.title}</li>
+        ))}
       </header>
     </div>
   );
