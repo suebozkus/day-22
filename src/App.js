@@ -1,10 +1,10 @@
-import logo from "./logo.svg";
 import "./App.css";
 import { useState, useEffect } from "react";
 
 function App() {
   const [todos, settodos] = useState([]);
   const [filteredTodos, setfilteredTodos] = useState([]);
+  const [completedState, setcompletedState] = useState("all");
   useEffect(() => {
     fetch("https://jsonplaceholder.typicode.com/todos")
       .then((response) => response.json())
@@ -13,23 +13,24 @@ function App() {
         setfilteredTodos(json);
       });
   }, []);
+
+  useEffect(() => {
+    const filteredTodos = todos.filter((todo) => {
+      if (completedState === "all") {
+        return true;
+      } else {
+        return todo.completed === completedState;
+      }
+    });
+    setfilteredTodos(filteredTodos);
+  }, [completedState]);
+
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
         <input
           className="Search"
+          placeholder="Filter"
           onKeyUp={(e) => {
             const filteredTodos = todos.filter((todo) => {
               return todo.title
@@ -39,6 +40,25 @@ function App() {
             setfilteredTodos(filteredTodos);
           }}
         ></input>
+
+        <button
+          onClick={(e) => {
+            if (completedState === "all") {
+              setcompletedState(false);
+            } else if (completedState === false) {
+              setcompletedState(true);
+            } else if (completedState === true) {
+              setcompletedState("all");
+            }
+          }}
+        >
+          {completedState === "all"
+            ? "Show open"
+            : completedState === false
+            ? "Show completed"
+            : "Show all"}
+        </button>
+
         <table>
           <tr>
             <th>ID</th>
