@@ -1,5 +1,6 @@
 import "./App.css";
 import { useState, useEffect } from "react";
+import List from "./List";
 
 function App() {
   const [todos, settodos] = useState([]);
@@ -28,53 +29,13 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <input
-          className="Search"
-          placeholder="Filter"
-          onKeyUp={(e) => {
-            const filteredTodos = todos.filter((todo) => {
-              return todo.title
-                .toLowerCase()
-                .includes(e.target.value.toLowerCase());
-            });
-            setfilteredTodos(filteredTodos);
-          }}
-        ></input>
-
-        <button
-          onClick={(e) => {
-            if (completedState === "all") {
-              setcompletedState(false);
-            } else if (completedState === false) {
-              setcompletedState(true);
-            } else if (completedState === true) {
-              setcompletedState("all");
-            }
-          }}
-        >
-          {completedState === "all"
-            ? "Show open"
-            : completedState === false
-            ? "Show completed"
-            : "Show all"}
-        </button>
-
-        <table>
-          <tr>
-            <th>ID</th>
-            <th>Title</th>
-            <th>UserID</th>
-            <th>Completed</th>
-          </tr>
-          {filteredTodos.map((todo) => (
-            <tr>
-              <td> {todo.id} </td>
-              <td> {todo.title} </td>
-              <td> {todo.userId} </td>
-              <td> {todo.completed.toString()} </td>
-            </tr>
-          ))}
-        </table>
+        <List
+          todos={todos}
+          setfilteredTodos={setfilteredTodos}
+          completedState={completedState}
+          filteredTodos={filteredTodos}
+          setcompletedState={setcompletedState}
+        />
       </header>
     </div>
   );
